@@ -1,3 +1,4 @@
+from http.client import OK
 import requests
 import json
 
@@ -12,10 +13,15 @@ def join(token):
     "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36",
     }
     username = requests.get("https://discord.com/api/v9/users/@me", headers=header)
-    print("Пользователь:", username.json()['username'])
+    try:
+        print("Пользователь:", username.json()['username'])
+    except:
+        pass
     response = requests.post("https://discord.com/api/v9/invites/{}".format(server_invite), headers=header)
-    print("Ответ:", response.json())
-
+    if response.status_code == OK:
+        print("Присоединился к серверу")
+    else:
+        print("Ответ:", response.json())
 
 if __name__ == "__main__":
     file = open("token.txt", "r")
